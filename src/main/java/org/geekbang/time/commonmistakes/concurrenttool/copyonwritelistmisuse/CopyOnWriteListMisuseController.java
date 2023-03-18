@@ -11,11 +11,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+/**
+ *
+ *在 Java 中，
+ * CopyOnWriteArrayList 虽然是一个线程安全的 ArrayList，但因为其实现方式是，每次
+ * 修改数据时都会复制一份数据出来，所以有明显的适用场景，即读多写少或者说希望无锁读
+ * 的场景。
+ */
 
 @RestController
 @RequestMapping("copyonwritelistmisuse")
 @Slf4j
 public class CopyOnWriteListMisuseController {
+
+    /**
+     *大量写的场景（10 万次 add 操作），CopyOnWriteArray 几乎比同
+     * 步的 ArrayList 慢一百倍：
+     * @return Map
+     */
 
     @GetMapping("write")
     public Map testWrite() {
@@ -39,6 +52,12 @@ public class CopyOnWriteListMisuseController {
     private void addAll(List<Integer> list) {
         list.addAll(IntStream.rangeClosed(1, 1000000).boxed().collect(Collectors.toList()));
     }
+
+    /**
+     *而在大量读的场景下（100 万次 get 操作），CopyOnWriteArray 又比同步的 ArrayList
+     * 快五倍以上：
+     * @return Map
+     */
 
     @GetMapping("read")
     public Map testRead() {

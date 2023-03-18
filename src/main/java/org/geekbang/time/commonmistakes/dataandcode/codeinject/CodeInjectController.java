@@ -18,12 +18,14 @@ import java.util.Map;
 @RestController
 public class CodeInjectController {
     private ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    // 获得 JavaScript 脚本引擎
     private ScriptEngine jsEngine = scriptEngineManager.getEngineByName("js");
 
     //haha';java.lang.System.exit(0);'
     @GetMapping("wrong")
     public Object wrong(@RequestParam("name") String name) {
         try {
+            // 通过eval动态执行 JavaScript脚本
             return jsEngine.eval(String.format("var name='%s'; name=='admin'?1:0;", name));
         } catch (ScriptException e) {
             e.printStackTrace();
@@ -35,8 +37,10 @@ public class CodeInjectController {
     @GetMapping("right")
     public Object right(@RequestParam("name") String name) {
         try {
+            //外部传入的参数
             Map<String, Object> parm = new HashMap<>();
             parm.put("name", name);
+            //name参数作为绑定传给eval方法，而不是拼接JavaScript代码
             return jsEngine.eval("name=='admin'?1:0;", new SimpleBindings(parm));
         } catch (ScriptException e) {
             e.printStackTrace();

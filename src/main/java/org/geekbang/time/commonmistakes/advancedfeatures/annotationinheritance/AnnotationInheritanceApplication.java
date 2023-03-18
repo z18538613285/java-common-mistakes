@@ -12,7 +12,9 @@ public class AnnotationInheritanceApplication {
     }
 
     private static String getAnnotationValue(MyAnnotation annotation) {
-        if (annotation == null) return "";
+        if (annotation == null) {
+            return "";
+        }
         return annotation.value();
     }
 

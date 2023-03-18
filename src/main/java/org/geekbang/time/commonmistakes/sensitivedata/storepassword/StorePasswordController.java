@@ -27,6 +27,7 @@ public class StorePasswordController {
         UserData userData = new UserData();
         userData.setId(1L);
         userData.setName(name);
+        //密码字段使用MD5哈希后保存
         userData.setPassword(DigestUtils.md5Hex(password));
         return userRepository.save(userData);
     }
@@ -74,8 +75,10 @@ public class StorePasswordController {
         UserData userData = new UserData();
         userData.setId(1L);
         userData.setName(name);
+        //保存哈希后的密码
         userData.setPassword(passwordEncoder.encode(password));
         userRepository.save(userData);
+        //判断密码是否匹配
         log.info("match ? {}", passwordEncoder.matches(password, userData.getPassword()));
         return userData;
     }

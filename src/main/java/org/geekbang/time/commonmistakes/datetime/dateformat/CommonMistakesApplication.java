@@ -38,7 +38,7 @@ public class CommonMistakesApplication {
 
     public static void main(String[] args) throws Exception {
 
-        wrong1();
+        better();
     }
 
     private static void test() {
@@ -54,6 +54,7 @@ public class CommonMistakesApplication {
         //三个问题，YYYY、线程不变安全、不合法格式
 
         Locale.setDefault(Locale.FRANCE);
+        //Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
         System.out.println("defaultLocale:" + Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         calendar.set(2019, Calendar.DECEMBER, 29, 0, 0, 0);
@@ -76,7 +77,7 @@ public class CommonMistakesApplication {
         System.out.println("格式化: " + yyyy.format(calendar.getTime()));
 
         String dateString = "20160901";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
         System.out.println("result:" + dateFormat.parse(dateString));
     }
 

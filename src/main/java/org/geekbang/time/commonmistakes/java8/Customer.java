@@ -6,12 +6,12 @@ import lombok.Data;
 import java.util.Arrays;
 import java.util.List;
 
-
+//顾客类
 @Data
 @AllArgsConstructor
 public class Customer {
     private Long id;
-    private String name;
+    private String name;//顾客姓名
 
     public static List<Customer> getData() {
         return Arrays.asList(

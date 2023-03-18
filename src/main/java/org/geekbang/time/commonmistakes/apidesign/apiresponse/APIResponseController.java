@@ -21,28 +21,28 @@ public class APIResponseController {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-//    @GetMapping("server")
-//    public APIResponse<OrderInfo> server(@RequestParam("userId") Long userId) {
-//        APIResponse<OrderInfo> response = new APIResponse<>();
-//        if (userId == null) {
-//            response.setSuccess(false);
-//            response.setCode(3001);
-//            response.setMessage("Illegal userId");
-//        } else if (userId == 1) {
-//            response.setSuccess(false);
-//            //把订单服务的错误包装转换
-//            response.setCode(3002);
-//            response.setMessage("Internal Error, order is cancelled");
-//            //同时日志记录内部错误
-//            log.warn("用户 {} 调用订单服务失败，原因是 Risk order detected", userId);
-//        } else {
-//            response.setSuccess(true);
-//            response.setCode(2000);
-//            response.setMessage("OK");
-//            response.setData(new OrderInfo("Created", 2L));
-//        }
-//        return response;
-//    }
+    //@GetMapping("server")
+    //public APIResponse<OrderInfo> server(@RequestParam("userId") Long userId) {
+    //    APIResponse<OrderInfo> response = new APIResponse<>();
+    //    if (userId == null) {
+    //        response.setSuccess(false);
+    //        response.setCode(3001);
+    //        response.setMessage("Illegal userId");
+    //    } else if (userId == 1) {
+    //        response.setSuccess(false);
+    //        //把订单服务的错误包装转换
+    //        response.setCode(3002);
+    //        response.setMessage("Internal Error, order is cancelled");
+    //        //同时日志记录内部错误
+    //        log.warn("用户 {} 调用订单服务失败，原因是 Risk order detected", userId);
+    //    } else {
+    //        response.setSuccess(true);
+    //        response.setCode(2000);
+    //        response.setMessage("OK");
+    //        response.setData(new OrderInfo("Created", 2L));
+    //    }
+    //    return response;
+    //}
 
     @GetMapping("server")
     public OrderInfo server(@RequestParam("userId") Long userId) {

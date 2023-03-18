@@ -12,6 +12,7 @@ enum StatusEnumServer {
     CANCELED(5, "已取消");
     @JsonValue
     private final int status;
+
     private final String desc;
 
     StatusEnumServer(Integer status, String desc) {

@@ -1,7 +1,12 @@
 package org.geekbang.time.commonmistakes.collection.aslist;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,9 +17,12 @@ public class AsListApplication {
 
     public static void main(String[] args) {
 
-        right2();
+        //right2();
+        //String clientIP = getClientIP();
+        //System.out.println(clientIP);
 
     }
+
 
     private static void wrong1() {
         int[] arr = {1, 2, 3};

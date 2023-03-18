@@ -21,9 +21,13 @@ public class UserController {
 
     @GetMapping("register")
     public void register() {
+        //模拟10个用户注册
         IntStream.rangeClosed(1, 10).forEach(i -> {
+            //落库
             User user = userService.register();
+            //模拟50%的消息可能发送失败
             if (ThreadLocalRandom.current().nextInt(10) % 2 == 0) {
+                //通过RabbitMQ发送消息
                 rabbitTemplate.convertAndSend(RabbitConfiguration.EXCHANGE, RabbitConfiguration.ROUTING_KEY, user);
                 log.info("sent mq user {}", user.getId());
             }

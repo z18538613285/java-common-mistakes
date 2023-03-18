@@ -14,11 +14,14 @@ import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
 public class CommonMistakesApplication {
 
     public static void main(String[] args) throws Exception {
-        wrong1();
-        wrong1fix();
-        right();
-        better();
-        test();
+        //wrong1();
+        //wrong1fix();
+        //right();
+        //better();
+        //test();
+        Date in = new Date();
+        LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
+        Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     private static void wrong1() {

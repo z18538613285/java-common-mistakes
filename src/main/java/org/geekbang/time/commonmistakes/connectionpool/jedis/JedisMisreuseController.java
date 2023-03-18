@@ -1,6 +1,7 @@
 package org.geekbang.time.commonmistakes.connectionpool.jedis;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,12 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("jedismisreuse")
 @Slf4j
 public class JedisMisreuseController {
-
-    private static JedisPool jedisPool = new JedisPool("127.0.0.1", 6379);
+    private static JedisPool jedisPool = new JedisPool(new GenericObjectPoolConfig(), "121.5.218.165", 17480,2000, "redis7484");
 
     @PostConstruct
     public void init() {
-        try (Jedis jedis = new Jedis("127.0.0.1", 6379)) {
+        try (Jedis jedis = new Jedis("121.5.218.165", 17480)) {
+            jedis.auth("redis7484");
             Assert.isTrue("OK".equals(jedis.set("a", "1")), "set a = 1 return OK");
             Assert.isTrue("OK".equals(jedis.set("b", "2")), "set b = 2 return OK");
         }
@@ -33,7 +34,8 @@ public class JedisMisreuseController {
 
     @GetMapping("/wrong")
     public void wrong() throws InterruptedException {
-        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Jedis jedis = new Jedis("121.5.218.165", 17480);
+        jedis.auth("redis7484");
         new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
                 String result = jedis.get("a");
@@ -90,7 +92,7 @@ public class JedisMisreuseController {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(1);
         config.setMaxWaitMillis(waittimeout);
-        try (JedisPool jedisPool = new JedisPool(config, "127.0.0.1", 6379, conntimeout);
+        try (JedisPool jedisPool = new JedisPool(config, "121.5.218.165", 17480, conntimeout,"redis7484");
              Jedis jedis = jedisPool.getResource()) {
             return jedis.set("test", "test");
         }

@@ -13,13 +13,14 @@ public class LambdaTest {
 
     @Test
     public void lambdavsanonymousclass() {
+        //匿名类
         new Thread(new Runnable() {
             @Override
             public void run() {
                 System.out.println("hello1");
             }
         }).start();
-
+        //Lambda表达式
         new Thread(() -> System.out.println("hello2")).start();
     }
 

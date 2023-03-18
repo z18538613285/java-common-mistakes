@@ -34,10 +34,13 @@ public class FanoutQueueRight {
 
     @Bean
     public Declarables declarables() {
+        //会员服务队列
         Queue memberQueue = new Queue(MEMBER_QUEUE);
+        //营销服务队列
         Queue promotionQueue = new Queue(PROMOTION_QUEUE);
-
+        //广播交换器
         FanoutExchange exchange = new FanoutExchange(EXCHANGE);
+        //两个队列绑定到同一个交换器
         return new Declarables(memberQueue, promotionQueue, exchange,
                 BindingBuilder.bind(memberQueue).to(exchange),
                 BindingBuilder.bind(promotionQueue).to(exchange));

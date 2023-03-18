@@ -29,9 +29,11 @@ import static java.util.stream.Collectors.toMap;
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class MetricsAspect {
+    //实现一个返回Java基本类型默认值的工具。
     private static final Map<Class<?>, Object> DEFAULT_VALUES = Stream
             .of(boolean.class, byte.class, char.class, double.class, float.class, int.class, long.class, short.class)
             .collect(toMap(clazz -> (Class<?>) clazz, clazz -> Array.get(Array.newInstance(clazz, 1), 0)));
+    //让Spring帮我们注入ObjectMapper，以方便通过JSON序列化来记录方法入参和出参
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -42,16 +44,16 @@ public class MetricsAspect {
 //    @Pointcut("@annotation(org.geekbang.time.commonmistakes.spring.demo2.Metrics)")
 //    public void withMetricsAnnotation() {
 //    }
-
+    //@annotation指示器实现对标记了Metrics注解的方法进行匹配
     @Pointcut("within(@org.geekbang.time.commonmistakes.springpart1.aopmetrics.Metrics *)")
     public void withMetricsAnnotation() {
     }
-
+    //within指示器实现了匹配那些类型上标记了@RestController注解的方法
     @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
     public void controllerBean() {
     }
 
-    @Around("controllerBean() || withMetricsAnnotation())")
+    @Around("controllerBean() || withMetricsAnnotation()")
     public Object metrics(ProceedingJoinPoint pjp) throws Throwable {
         //尝试获取当前方法的类名和方法名
         MethodSignature signature = (MethodSignature) pjp.getSignature();
@@ -61,6 +63,7 @@ public class MetricsAspect {
         if (metrics == null) {
             metrics = signature.getMethod().getDeclaringClass().getAnnotation(Metrics.class);
         }
+
         //对于Controller和Repository，我们需要初始化一个@Metrics注解出来
         if (metrics == null) {
             @Metrics

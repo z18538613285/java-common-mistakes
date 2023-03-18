@@ -23,11 +23,13 @@ public class PerformanceController {
 
     @GetMapping("redis")
     public void redis() {
+        //使用随机的Key来查询Value，结果应该等于PAYLOAD
         Assert.assertTrue(stringRedisTemplate.opsForValue().get("item" + (ThreadLocalRandom.current().nextInt(CommonMistakesApplication.ROWS) + 1)).equals(CommonMistakesApplication.PAYLOAD));
     }
 
     @GetMapping("redis2")
     public void redis2() {
+        //根据随机name来查data，name字段有索引，结果应该等于PAYLOAD
         Assert.assertTrue(stringRedisTemplate.keys("item71*").size() == 1111);
     }
 

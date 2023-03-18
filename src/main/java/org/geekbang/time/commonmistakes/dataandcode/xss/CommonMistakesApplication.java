@@ -13,6 +13,7 @@ public class CommonMistakesApplication {
         SpringApplication.run(CommonMistakesApplication.class, args);
     }
 
+    //注册自定义的Jackson反序列器
     @Bean
     public Module xssModule() {
         SimpleModule module = new SimpleModule();

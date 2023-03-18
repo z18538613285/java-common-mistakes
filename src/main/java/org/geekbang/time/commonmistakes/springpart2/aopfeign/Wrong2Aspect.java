@@ -4,10 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
 
 @Aspect
 @Slf4j
-//@Component
+@Component
 public class Wrong2Aspect {
 
     @Before("@within(org.springframework.cloud.openfeign.FeignClient)")

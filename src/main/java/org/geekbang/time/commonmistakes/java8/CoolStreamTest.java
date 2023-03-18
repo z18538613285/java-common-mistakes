@@ -45,6 +45,7 @@ public class CoolStreamTest {
                 count++;
             }
         }
+        //注意count可能为0的可能
         return count > 0 ? total / count : 0;
     }
 
@@ -94,14 +95,18 @@ public class CoolStreamTest {
     private Product getProductAndCache(Long id) {
         Product product = null;
         if (cache.containsKey(id)) {
+            //Key存在，返回Value
             product = cache.get(id);
         } else {
+            //不存在，则获取Value
+            //需要遍历数据源查询获得Product
             for (Product p : Product.getData()) {
                 if (p.getId().equals(id)) {
                     product = p;
                     break;
                 }
             }
+            //加入ConcurrentHashMap
             if (product != null)
                 cache.put(id, product);
         }

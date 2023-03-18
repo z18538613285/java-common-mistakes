@@ -1,17 +1,19 @@
 package org.geekbang.time.commonmistakes.datetime.newdate;
 
+import com.mysql.cj.xdevapi.JsonArray;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 public class CommonMistakesApplication {
 
     public static void main(String[] args) throws Exception {
         wrong();
+        wrongfix();
         right();
         better();
     }
@@ -23,7 +25,7 @@ public class CommonMistakesApplication {
     }
 
     private static void wrongfix() {
-        System.out.println("right");
+        System.out.println("wrongfix");
         Date date = new Date(2019 - 1900, 11, 31, 11, 12, 13);
         System.out.println(date);
     }

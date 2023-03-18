@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GenericAndInheritanceApplication {
 
     public static void main(String[] args) {
-        wrong3();
+        right();
     }
 
     public static void wrong1() {
@@ -57,12 +57,12 @@ public class GenericAndInheritanceApplication {
         Arrays.stream(child2.getClass().getDeclaredMethods())
                 .filter(method -> method.getName().equals("setValue") && !method.isBridge())
                 .findFirst().ifPresent(method -> {
-            try {
-                method.invoke(child2, "test");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+                    try {
+                        method.invoke(child2, "test");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
         System.out.println(child2.toString());
     }
 }
@@ -103,3 +103,4 @@ class Child2 extends Parent<String> {
         super.setValue(value);
     }
 }
+

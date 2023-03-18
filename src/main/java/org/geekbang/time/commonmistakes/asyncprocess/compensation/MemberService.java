@@ -11,15 +11,19 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 public class MemberService {
+    //发送欢迎消息的状态
     private Map<Long, Boolean> welcomeStatus = new ConcurrentHashMap<>();
 
+    //监听用户注册成功的消息，发送欢迎消息
     @RabbitListener(queues = RabbitConfiguration.QUEUE)
     public void listen(User user) {
         log.info("receive mq user {}", user.getId());
         welcome(user);
     }
 
+    //发送欢迎消息
     public void welcome(User user) {
+        //去重操作
         if (welcomeStatus.putIfAbsent(user.getId(), true) == null) {
             try {
                 TimeUnit.SECONDS.sleep(2);

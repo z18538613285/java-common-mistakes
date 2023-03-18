@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 public class CompensationJob {
+    //补偿Job异步处理线程池
     private static ThreadPoolExecutor compensationThreadPool = new ThreadPoolExecutor(
             10, 10,
             1, TimeUnit.HOURS,
@@ -22,11 +23,14 @@ public class CompensationJob {
     private UserService userService;
     @Autowired
     private MemberService memberService;
+    //目前补偿到哪个用户ID
     private long offset = 0;
 
+    //10秒后开始补偿，5秒补偿一次
     @Scheduled(initialDelay = 10_000, fixedRate = 5_000)
     public void compensationJob() {
         log.info("开始从用户ID {} 补偿", offset);
+        //获取从offset开始的用户
         userService.getUsersAfterIdWithLimit(offset, 5).forEach(user -> {
             compensationThreadPool.execute(() -> memberService.welcome(user));
             offset = user.getId();

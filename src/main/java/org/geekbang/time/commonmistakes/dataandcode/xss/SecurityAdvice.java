@@ -11,6 +11,7 @@ import java.beans.PropertyEditorSupport;
 public class SecurityAdvice {
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
+        //注册自定义的绑定器
         binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
             @Override
             public String getAsText() {
@@ -20,6 +21,7 @@ public class SecurityAdvice {
 
             @Override
             public void setAsText(String text) {
+                //赋值时进行HTML转义
                 setValue(text == null ? null : HtmlUtils.htmlEscape(text));
             }
         });
