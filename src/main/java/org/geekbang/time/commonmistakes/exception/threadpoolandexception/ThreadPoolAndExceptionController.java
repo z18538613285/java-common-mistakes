@@ -20,7 +20,6 @@ import java.util.stream.IntStream;
 public class ThreadPoolAndExceptionController {
 
     static {
-        // 注释
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> log.error("Thread {} got exception", thread, throwable));
     }
 
