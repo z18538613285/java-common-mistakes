@@ -15,6 +15,7 @@ public class MQListener {
         //throw new AmqpRejectAndDontRequeueException("error");
     }
 
+    //死信队列处理程序
     @RabbitListener(queues = Consts.DEAD_QUEUE)
     public void deadHandler(String data) {
         log.error("got dead message {}", data);

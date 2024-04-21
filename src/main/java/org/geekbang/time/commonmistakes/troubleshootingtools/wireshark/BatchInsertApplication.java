@@ -25,6 +25,7 @@ public class BatchInsertApplication implements CommandLineRunner {
 
     @PostConstruct
     public void init() {
+        //初始化表
         jdbcTemplate.execute("drop table IF EXISTS `testuser`;");
         jdbcTemplate.execute("create TABLE `testuser` (\n" +
                 "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
@@ -38,14 +39,17 @@ public class BatchInsertApplication implements CommandLineRunner {
 
         long begin = System.currentTimeMillis();
         String sql = "INSERT INTO `testuser` (`name`) VALUES (?)";
+        //使用JDBC批量更新
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+                //第一个参数(索引从1开始)，也就是name列赋值
                 preparedStatement.setString(1, "usera" + i);
             }
 
             @Override
             public int getBatchSize() {
+                //批次大小为10000
                 return 10000;
             }
         });

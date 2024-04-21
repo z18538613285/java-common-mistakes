@@ -33,7 +33,9 @@ public class CachePenetrationController {
             log.info("DB QPS : {}", atomicInteger.getAndSet(0));
         }, 0, 1, TimeUnit.SECONDS);
 
+        //创建布隆过滤器，元素数量10000，期望误判率1%
         bloomFilter = BloomFilter.create(Funnels.integerFunnel(), 10000, 0.01);
+        //填充布隆过滤器
         IntStream.rangeClosed(1, 10000).forEach(bloomFilter::put);
     }
 
@@ -41,6 +43,7 @@ public class CachePenetrationController {
     public String wrong(@RequestParam("id") int id) {
         String key = "user" + id;
         String data = stringRedisTemplate.opsForValue().get(key);
+        //无法区分是无效用户还是缓存失效
         if (StringUtils.isEmpty(data)) {
             data = getCityFromDb(id);
             stringRedisTemplate.opsForValue().set(key, data, 30, TimeUnit.SECONDS);
@@ -54,9 +57,11 @@ public class CachePenetrationController {
         String data = stringRedisTemplate.opsForValue().get(key);
         if (StringUtils.isEmpty(data)) {
             data = getCityFromDb(id);
+            //校验从数据库返回的数据是否有效
             if (!StringUtils.isEmpty(data)) {
                 stringRedisTemplate.opsForValue().set(key, data, 30, TimeUnit.SECONDS);
             } else {
+                //如果无效，直接在缓存中设置一个NODATA，
                 stringRedisTemplate.opsForValue().set(key, "NODATA", 30, TimeUnit.SECONDS);
             }
 
@@ -67,10 +72,13 @@ public class CachePenetrationController {
     @GetMapping("right2")
     public String right2(@RequestParam("id") int id) {
         String data = "";
+        //通过布隆过滤器先判断
         if (bloomFilter.mightContain(id)) {
             String key = "user" + id;
+            //走缓存查询
             data = stringRedisTemplate.opsForValue().get(key);
             if (StringUtils.isEmpty(data)) {
+                //走数据库查询
                 data = getCityFromDb(id);
                 stringRedisTemplate.opsForValue().set(key, data, 30, TimeUnit.SECONDS);
             }
@@ -80,7 +88,9 @@ public class CachePenetrationController {
 
     private String getCityFromDb(int id) {
         atomicInteger.incrementAndGet();
+        //注意，只有ID介于0（不含）和10000（包含）之间的用户才是有效用户，可以查询到用户信息
         if (id > 0 && id <= 10000) return "userdata";
+        //否则返回空字符串
         return "";
     }
 }

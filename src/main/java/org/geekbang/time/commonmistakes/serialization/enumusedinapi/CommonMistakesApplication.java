@@ -26,11 +26,11 @@ public class CommonMistakesApplication {
                 .build();
     }
 
-    @Bean
-    public Module enumModule() {
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Enum.class, new EnumDeserializer());
-        return module;
-    }
+    //@Bean
+    //public Module enumModule() {
+    //    SimpleModule module = new SimpleModule();
+    //    module.addDeserializer(Enum.class, new EnumDeserializer());
+    //    return module;
+    //}
 }
 

@@ -22,9 +22,10 @@ public class CommonMistakesApplication {
         System.out.println(ManagementFactory.getRuntimeMXBean().getInputArguments().stream().collect(Collectors.joining(System.lineSeparator())));
         System.out.println("Program arguments");
         System.out.println(Arrays.stream(args).collect(Collectors.joining(System.lineSeparator())));
-
+        //启动10个线程
         IntStream.rangeClosed(1, 10).mapToObj(i -> new Thread(() -> {
             while (true) {
+                //每一个线程都是一个死循环，休眠10秒，打印10M数据
                 String payload = IntStream.rangeClosed(1, 10000000)
                         .mapToObj(__ -> "a")
                         .collect(Collectors.joining("")) + UUID.randomUUID().toString();

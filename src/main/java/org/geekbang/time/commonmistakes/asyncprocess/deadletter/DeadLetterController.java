@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 @RestController
 public class DeadLetterController {
-
+    //自增消息标识
     AtomicLong atomicLong = new AtomicLong();
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -22,6 +22,7 @@ public class DeadLetterController {
     public void sendMessage() {
         String msg = "msg" + atomicLong.incrementAndGet();
         log.info("send message {}", msg);
+        //发送消息
         rabbitTemplate.convertAndSend(Consts.EXCHANGE, msg);
     }
 }

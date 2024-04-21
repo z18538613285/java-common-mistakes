@@ -16,6 +16,7 @@ public class XssJsonSerializer extends JsonSerializer<String> {
     @Override
     public void serialize(String value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         if (value != null) {
+            //对字符串进行HTML转义
             jsonGenerator.writeString(HtmlUtils.htmlEscape(value));
         }
     }

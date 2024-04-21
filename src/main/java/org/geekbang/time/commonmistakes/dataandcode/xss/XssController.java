@@ -44,17 +44,18 @@ public class XssController {
     public User query() {
         return userRepository.findById(1L).orElse(new User());
     }
-
+    //服务端读取Cookie
     @GetMapping("readCookie")
     @ResponseBody
     public String readCookie(@CookieValue("test") String cookieValue) {
         return cookieValue;
     }
-
+    //服务端写入Cookie
     @GetMapping("writeCookie")
     @ResponseBody
     public void writeCookie(@RequestParam("httpOnly") boolean httpOnly, HttpServletResponse response) {
         Cookie cookie = new Cookie("test", "zhuye");
+        //根据httpOnly入参决定是否开启HttpOnly属性
         cookie.setHttpOnly(httpOnly);
         response.addCookie(cookie);
     }

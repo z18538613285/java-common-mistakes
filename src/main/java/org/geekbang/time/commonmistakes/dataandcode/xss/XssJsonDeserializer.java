@@ -14,6 +14,7 @@ public class XssJsonDeserializer extends JsonDeserializer<String> {
     public String deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         String value = jsonParser.getValueAsString();
         if (value != null) {
+            //对于值进行HTML转义
             return HtmlUtils.htmlEscape(value);
         }
         return value;

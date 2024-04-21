@@ -7,16 +7,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-@Metrics(ignoreException = true)
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
     @Transactional
+    @Metrics(ignoreException = true)
     public void createUser(UserEntity entity) {
         userRepository.save(entity);
-        if (entity.getName().contains("test"))
+        if (entity.getName().contains("test")) {
             throw new RuntimeException("invalid username!");
+        }
     }
 
     public int getUserCount(String name) {

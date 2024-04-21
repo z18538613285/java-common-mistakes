@@ -18,6 +18,7 @@ public class OOMApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        //程序启动后，不断调用Fooservice.oom()方法
         while (true) {
             fooService.oom();
         }

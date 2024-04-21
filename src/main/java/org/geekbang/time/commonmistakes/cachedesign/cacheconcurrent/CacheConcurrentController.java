@@ -29,7 +29,9 @@ public class CacheConcurrentController {
 
     @PostConstruct
     public void init() {
+        //初始化一个热点数据到Redis中，过期时间设置为5秒
         stringRedisTemplate.opsForValue().set("hotsopt", getExpensiveData(), 5, TimeUnit.SECONDS);
+        //每隔1秒输出一下回源的QPS
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             log.info("DB QPS : {}", atomicInteger.getAndSet(0));
         }, 0, 1, TimeUnit.SECONDS);
@@ -40,6 +42,7 @@ public class CacheConcurrentController {
         String data = stringRedisTemplate.opsForValue().get("hotsopt");
         if (StringUtils.isEmpty(data)) {
             data = getExpensiveData();
+            //重新加入缓存，过期时间还是5秒
             stringRedisTemplate.opsForValue().set("hotsopt", data, 5, TimeUnit.SECONDS);
         }
         return data;
@@ -50,14 +53,18 @@ public class CacheConcurrentController {
         String data = stringRedisTemplate.opsForValue().get("hotsopt");
         if (StringUtils.isEmpty(data)) {
             RLock locker = redissonClient.getLock("locker");
+            //获取分布式锁
             if (locker.tryLock()) {
                 try {
                     data = stringRedisTemplate.opsForValue().get("hotsopt");
+                    //双重检查
                     if (StringUtils.isEmpty(data)) {
+                        //回源到数据库查询
                         data = getExpensiveData();
                         stringRedisTemplate.opsForValue().set("hotsopt", data, 5, TimeUnit.SECONDS);
                     }
                 } finally {
+                    //别忘记释放
                     locker.unlock();
                 }
             }

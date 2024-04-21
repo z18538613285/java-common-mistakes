@@ -24,7 +24,7 @@ public class SqlInjectController {
     public void handle(HttpServletRequest req, HandlerMethod method, Exception ex) {
         log.warn(String.format("访问 %s -> %s 出现异常！", req.getRequestURI(), method.toString()), ex);
     }
-
+    //程序启动时进行表结构和数据初始化
     @PostConstruct
     public void init() {
         jdbcTemplate.execute("drop table IF EXISTS `userdata`;");
@@ -36,13 +36,14 @@ public class SqlInjectController {
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
         jdbcTemplate.execute("INSERT INTO `userdata` (name,password) VALUES ('test1','haha1'),('test2','haha2')");
     }
-
+    //用户模糊搜索接口
     @PostMapping("jdbcwrong")
     public void jdbcwrong(@RequestParam("name") String name) {
         //curl -X POST http://localhost:45678/sqlinject/jdbcwrong\?name\=test
         //python sqlmap.py -u  http://localhost:45678/sqlinject/jdbcwrong --data name=test --current-db --flush-session
         //python sqlmap.py -u  http://localhost:45678/sqlinject/jdbcwrong --data name=test --tables -D "common_mistakes"
         //python sqlmap.py -u  http://localhost:45678/sqlinject/jdbcwrong --data name=test -D "common_mistakes" -T "userdata" --dump
+        //采用拼接SQL的方式把姓名参数拼到LIKE子句中
         log.info("{}", jdbcTemplate.queryForList("SELECT id,name FROM userdata WHERE name LIKE '%" + name + "%'"));
     }
 

@@ -13,9 +13,9 @@ enum StatusEnumClient {
     @JsonEnumDefaultValue
     UNKNOWN(-1, "未知");
 
+    private final String desc;
     @JsonValue
     private final int status;
-    private final String desc;
 
     StatusEnumClient(Integer status, String desc) {
         this.status = status;

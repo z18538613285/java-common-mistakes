@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
+//自定义过滤器
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class XssFilter implements Filter {

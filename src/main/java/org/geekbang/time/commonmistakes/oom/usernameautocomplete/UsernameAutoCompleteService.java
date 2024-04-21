@@ -22,7 +22,7 @@ public class UsernameAutoCompleteService {
     @Autowired
     private UserRepository userRepository;
 
-    @PostConstruct
+    //@PostConstruct
     public void wrong() {
         userRepository.saveAll(LongStream.rangeClosed(1, 10000).mapToObj(i -> new UserEntity(i, randomName())).collect(Collectors.toList()));
 
@@ -38,7 +38,7 @@ public class UsernameAutoCompleteService {
                 autoCompleteIndex.entrySet().stream().map(item -> item.getValue().size()).reduce(0, Integer::sum));
     }
 
-    //@PostConstruct
+    @PostConstruct
     public void right() {
         userRepository.saveAll(LongStream.rangeClosed(1, 10000).mapToObj(i -> new UserEntity(i, randomName())).collect(Collectors.toList()));
 
